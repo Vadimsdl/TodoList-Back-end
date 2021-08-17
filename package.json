@@ -1,0 +1,21 @@
+{
+  "name": "user-list-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "front": "npm run start --prefix user-list",
+    "dev": "concurrently \"npm run server\" \"npm run front\""
+  },
+  "author": "Vadim",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^6.2.1",
+    "config": "^3.3.6",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.7"
+  }
+}
