@@ -8,7 +8,7 @@ const URL = config.get('MongoUri');
 
 app.use(express.json({ extended: true }));
 
-app.use('/api/routs', require('./routes/routs'));
+app.use('/api', require('./routes/routs'));
 
 async function start(todo) {
     try {

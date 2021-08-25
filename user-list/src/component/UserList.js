@@ -8,7 +8,7 @@ function UserList({tasks, addListElem, id = null, deleteSublist, removeTask, set
 	const changeAddTask = (e) => { 
 			setValue(e.target.value);
 	}
-	console.log(tasks);
+	
 	const clickAddTask = () => {
 
 		if (getValue !== '') {

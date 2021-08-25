@@ -10,7 +10,6 @@ function Sublist({taskTitle, task, deleteSublist, tasks, addListElem, removeTask
   const clickRemoveTask = () => {
     removeTask(task.id, task.parentId)
     setIndex(index=>index-=1);
-    console.log(getIndex)
   }
   
   return (

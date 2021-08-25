@@ -12,7 +12,7 @@ function App() {
   const {request} = useHttp();
 
   useEffect(() => {
-    request('/api/routs/', 'POST')
+    request('/api/', 'POST')
     .then(tasks => setTasks(tasks));
   }, [request]);
 
@@ -28,100 +28,31 @@ function App() {
       parentId: parentId,
     };
     setTasks([...tasks, obj]);
-    request('/api/routs/add', 'POST', obj);
+    request('/api/add', 'POST', obj);
   }
 
-  const deleteSublist = (id) => {
-    setTasks(tasks => removeSublist({tasks, id}));
+  const deleteSublist = async (id) => {
+    await request('/api/remove', 'POST',{ parentId: id});
+    await request('/api/', 'POST')
+    .then(tasks => setTasks(tasks));
   }
 
-  const removeSublist = ({tasks, id}) => {
-    for (let i = 0; i < tasks.length; i++) {
-    
-      if (tasks[i].parentId === id) {
-        removeSublist({tasks: tasks, id: tasks[i].id});
-        const obj = tasks.splice(i, 1);
-        request('/api/routs/remove', 'POST', obj[0]);
-        i--;
-      }
-    }
-   
-    return [...tasks];
+  const deleteTask = async (id, parentId) => {
+    await request('/api/remove', 'POST',{ id: id, parentId: parentId});
+    await request('/api/', 'POST')
+    .then(tasks => setTasks(tasks));
   }
 
-  const deleteTask = (id, parentId) => {
-    setTasks(tasks => removeTask({tasks, id, parentId}));
-
+  const setUp = async (id, parentId) => {
+    await request('/api/update/up', 'POST', {id, parentId});
+    await request('/api/', 'POST')
+    .then(tasks => setTasks(tasks));
   }
 
-  const removeTask = ({tasks, id, parentId}) => {
-    for (let i = 0; i < tasks.length; i++) {
-     
-      if (tasks[i].parentId === id) {
-        removeTask({tasks: tasks, id: tasks[i].id});
-        const obj = tasks.splice(i, 1);
-        request('/api/routs/remove', 'POST', obj[0]);
-        i--;
-      } else if (tasks[i].id === id) {
-        const obj = tasks.splice(i, 1);
-        request('/api/routs/remove', 'POST', obj[0]);
-        i--;
-      }
-    }
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].parentId === parentId) {
-        tasks[i].index = i;
-        request('/api/routs/update', 'POST', tasks[i]);
-      }
-    }
-    console.log(tasks)
-    return [...tasks];
-  }
-
-  const setUp = (id, parentId) => {
-    const cloneTasks = [...tasks];
-    console.log(tasks);
-    for(let i = 0 ; i < cloneTasks.length ; i++) 
-    {
-      cloneTasks[i] = {...cloneTasks[i]}
-
-      if (cloneTasks[i].id === id) {
-        try { 
-          const taskMove = cloneTasks[i].index;
-          const taskIndex = cloneTasks.findIndex(task => task.index === (taskMove-1) && task.parentId === parentId);
-          const task = cloneTasks.find(task => task.index === (taskMove-1) && task.parentId === parentId);
-          cloneTasks[i].index = task.index;
-          cloneTasks[taskIndex].index = taskMove;
-          request('/api/routs/update', 'POST', cloneTasks[i]);
-          request('/api/routs/update', 'POST', cloneTasks[taskIndex]);
-        } catch {}
-      }
-    }
-    console.log(cloneTasks);
-    setTasks([...cloneTasks]);
-  }
-
-  const setDown = (id, parentId) => {
-    const cloneTasks = [...tasks];
-    
-    for(let i = 0 ; i < cloneTasks.length ; i++) 
-    {
-      cloneTasks[i] = {...cloneTasks[i]}
-
-      if (cloneTasks[i].id === id) {
-        try {
-          const taskMove = cloneTasks[i].index;
-          let taskIndex = cloneTasks.findIndex(task => task.index === (taskMove+1) && task.parentId === parentId);
-          let task = cloneTasks.find(task => task.index === (taskMove+1) && task.parentId === parentId);
-          cloneTasks[i].index = task.index;
-          cloneTasks[taskIndex].index = taskMove;
-          request('/api/routs/update', 'POST', cloneTasks[i]);
-          request('/api/routs/update', 'POST', cloneTasks[taskIndex]);
-        } catch{}
-      }
-    }
-  
-    setTasks([...cloneTasks]);
+  const setDown = async (id, parentId) => {
+    await request('/api/update/down', 'POST', {id, parentId});
+    await request('/api/', 'POST')
+    .then(tasks => setTasks(tasks));
   }
 
   return (
