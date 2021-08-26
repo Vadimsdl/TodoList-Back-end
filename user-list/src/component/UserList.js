@@ -6,14 +6,21 @@ function UserList({tasks, addListElem, id = null, deleteSublist, removeTask, set
   const [getIndex, setIndex] = useState(0);
 
 	const changeAddTask = (e) => { 
-			setValue(e.target.value);
+		setValue(e.target.value);
 	}
 	
 	const clickAddTask = () => {
 
 		if (getValue !== '') {
-			addListElem({parentId: id, title: getValue, index: getIndex});
-			setIndex(index => index += 1);
+			
+			if (!!id){
+				addListElem({parentId: id, title: getValue, index: tasks.length});
+			}
+			else {
+				addListElem({parentId: id, title: getValue, index: getIndex});
+				setIndex(index => index += 1);
+			}
+			
 			setValue('');
 		}
 	}
@@ -47,7 +54,7 @@ function UserList({tasks, addListElem, id = null, deleteSublist, removeTask, set
 					value={getValue}
 					onChange={changeAddTask}
 				/>
-				<button type="button" className="btn" onClick={clickAddTask} >Add</button>
+				<button type="button" className="btn" onClick={clickAddTask}>Add</button>
 			</li>
 		</ul>
 	);

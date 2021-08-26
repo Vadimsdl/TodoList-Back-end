@@ -5,7 +5,7 @@ const convertToTree = (tasks) => {
   
   for (i = 0; i < tasksClone.length; i++) {
     tasksClone[i] = {...tasksClone[i]}
-    map[tasksClone[i].id] = i;
+    map[tasksClone[i]._id] = i;
     tasksClone[i].sublist = [];
   }
   

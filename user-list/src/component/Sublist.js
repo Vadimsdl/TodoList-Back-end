@@ -4,12 +4,17 @@ import UserList from './UserList'
 function Sublist({taskTitle, task, deleteSublist, tasks, addListElem, removeTask, setUp, setDown, getIndex, setIndex }) {
 
   useEffect(() => {
-    setIndex(task.index+1)
+    setIndex(task.index+1);
   });
 
   const clickRemoveTask = () => {
-    removeTask(task.id, task.parentId)
+    removeTask(task._id, task.parentId);
     setIndex(index=>index-=1);
+  }
+
+  const clickRemoveSublist =() => {
+    setIndex(0);
+    deleteSublist(task._id);
   }
   
   return (
@@ -17,14 +22,14 @@ function Sublist({taskTitle, task, deleteSublist, tasks, addListElem, removeTask
       <div className="title-block">
       <span className="title-task">{taskTitle}</span>
       </div>
-      <button className="btn" type="button" onClick={() => setUp(task.id, task.parentId)}>Up</button>
-      <button className="btn" type="button" onClick={() => setDown(task.id, task.parentId)}>Down</button>
+      <button className={task.index === 0 ? "btn display-none" : "btn" } type="button" onClick={() => setUp(task._id, task.parentId)}>Up</button>
+      <button className={task.index === tasks.length-1 ? "btn display-none" : "btn" }  type="button" onClick={() => setDown(task._id, task.parentId)}>Down</button>
       <button className="btn" type="button" onClick={() => clickRemoveTask()}>Delete</button>
-      <button className="btn" type="button" onClick={() => deleteSublist(task.id)}>Remove Sublist</button>
+      <button className="btn" type="button" onClick={() => clickRemoveSublist()}>Remove Sublist</button>
         <UserList
           addListElem={addListElem}
           tasks={task.sublist}
-          id={task.id}
+          id={task._id}
           taskTitle={taskTitle}
           deleteSublist={deleteSublist}
           removeTask={removeTask}
